@@ -67,6 +67,15 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// == Trigger AttackStart when shooting and loop
+	if (Shooting) {
+		if (WeaponSlot1) {
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 0.005, FColor::Yellow, TEXT("Casting to weapon"));
+			if (WeaponSlot1->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass()))
+				IWeaponInterface::Execute_AttackStart(WeaponSlot1);
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -133,13 +142,20 @@ void APlayerCharacter::PlayerJump()
 // == Shooting
 void APlayerCharacter::ShootDown()
 {
-
+	// == Set shooting variable to true
+	Shooting = true;
 }
 
 void APlayerCharacter::ShootUp()
 {
-
+	// == Set shooting to false and call AttackingEnd
+	Shooting = false;
+	if (WeaponSlot1) {
+		if (WeaponSlot1->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass()))
+			IWeaponInterface::Execute_AttackEnd(WeaponSlot1);
+	}
 }
+
 
 // == Aiming
 void APlayerCharacter::ADSDown()

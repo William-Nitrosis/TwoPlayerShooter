@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/ChildActorComponent.h"
+#include "WeaponInterface.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -58,6 +59,9 @@ public:
 
 	// == Input variables
 	FVector2D MovementInput;
+
+	// == Weapon system variables
+	bool Shooting = false;
 
 	// == User settings
 	float UserSetting_MouseSensitivity = 0.5f;
