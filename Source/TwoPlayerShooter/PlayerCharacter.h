@@ -56,12 +56,14 @@ public:
 	void ShootUp();
 	void ADSDown();
 	void ADSUp();
+	void Reload();
 
 	// == Input variables
 	FVector2D MovementInput;
 
 	// == Weapon system variables
 	bool Shooting = false;
+	bool CanShoot = false;
 
 	// == User settings
 	float UserSetting_MouseSensitivity = 0.5f;

@@ -22,7 +22,15 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MyCategory")
 		void AttackStart();
 
-	//classes using this interface may implement ReactToMidnight
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MyCategory")
 		void AttackEnd();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MyCategory")
+		void Reload();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MyCategory")
+		void ScopeIn();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "MyCategory")
+		void ScopeOut();
 };

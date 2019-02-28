@@ -69,11 +69,10 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	// == Trigger AttackStart when shooting and loop
 	if (Shooting) {
-		if (WeaponSlot1) {
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 0.005, FColor::Yellow, TEXT("Casting to weapon"));
-			if (WeaponSlot1->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass()))
-				IWeaponInterface::Execute_AttackStart(WeaponSlot1);
+		if (WeaponSlot1) {		
+			if (WeaponSlot1->GetChildActor()->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass())) {
+				IWeaponInterface::Execute_AttackStart(WeaponSlot1->GetChildActor());
+			}
 		}
 	}
 }
@@ -98,7 +97,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("AimingDownSights", IE_Pressed, this, &APlayerCharacter::ADSDown);
 	PlayerInputComponent->BindAction("AimingDownSights", IE_Released, this, &APlayerCharacter::ADSUp);
 
-
+	PlayerInputComponent->BindAction("Reload", IE_Released, this, &APlayerCharacter::Reload);
 }
 
 // ====================
@@ -151,8 +150,9 @@ void APlayerCharacter::ShootUp()
 	// == Set shooting to false and call AttackingEnd
 	Shooting = false;
 	if (WeaponSlot1) {
-		if (WeaponSlot1->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass()))
-			IWeaponInterface::Execute_AttackEnd(WeaponSlot1);
+		if (WeaponSlot1->GetChildActor()->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass())) {
+			IWeaponInterface::Execute_AttackEnd(WeaponSlot1->GetChildActor());
+		}
 	}
 }
 
@@ -168,4 +168,14 @@ void APlayerCharacter::ADSUp()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 600;
 	
+}
+
+// == Reloading
+void APlayerCharacter::Reload()
+{
+	if (WeaponSlot1) {
+		if (WeaponSlot1->GetChildActor()->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass())) {
+			IWeaponInterface::Execute_Reload(WeaponSlot1->GetChildActor());
+		}
+	}
 }
