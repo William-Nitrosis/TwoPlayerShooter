@@ -26,7 +26,7 @@ APlayerCharacter::APlayerCharacter()
 	// Set arm location
 	FP_Arms->SetRelativeLocationAndRotation(FVector(0.0f, -4.0f, -158.0f), FRotator(-0.0f, 0.0f, 0.0f));
 	// Make sure only the player can see
-	FP_Arms->bOnlyOwnerSee = true;
+	FP_Arms->bOnlyOwnerSee = false;
 	// Set shadow settings
 	FP_Arms->CastShadow = false;
 	
@@ -34,7 +34,7 @@ APlayerCharacter::APlayerCharacter()
 	// Create weapon 1 in world from pointer
 	WeaponSlot1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("WeaponSlot1"));
 	// Attach to camera
-	WeaponSlot1->AttachToComponent(FP_Arms, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("hand_r_Weapon"));
+	WeaponSlot1->AttachToComponent(FP_Arms, FAttachmentTransformRules::SnapToTargetIncludingScale, FName("hand_l_Weapon"));
 
 
 
@@ -161,13 +161,17 @@ void APlayerCharacter::ShootUp()
 void APlayerCharacter::ADSDown()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 350;
-	
+	if (WeaponSlot1->GetChildActor()->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass())) {
+		IWeaponInterface::Execute_ScopeIn(WeaponSlot1->GetChildActor());
+	}
 }
 
 void APlayerCharacter::ADSUp()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 600;
-	
+	if (WeaponSlot1->GetChildActor()->GetClass()->ImplementsInterface(UWeaponInterface::StaticClass())) {
+		IWeaponInterface::Execute_ScopeOut(WeaponSlot1->GetChildActor());
+	}
 }
 
 // == Reloading
